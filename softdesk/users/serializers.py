@@ -44,10 +44,10 @@ class UserSerializer(serializers.ModelSerializer):
             serializers.ValidationError: If the age is below 15.
         """
         if value is None:
-            raise serializers.ValidationError("Age is required.")
+            raise serializers.ValidationError("L'âge est requis.")
         if value < 15:
             raise serializers.ValidationError(
-                "You must be at least 15 years old to register."
+                "Vous devez avoir au moins 15 ans pour vous inscrire.."
             )
         return value
 
