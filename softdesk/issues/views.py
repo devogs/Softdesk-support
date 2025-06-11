@@ -22,10 +22,14 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Returns issues for the specific project identified by project_pk in the URL.
+        Returns the queryset of issues for the current request,
+        ordered to ensure consistent pagination.
         """
-        project_pk = self.kwargs["project_pk"]
-        return Issue.objects.filter(project_id=project_pk)
+        project_pk = self.kwargs.get('project_pk')
+        if project_pk:
+            return Issue.objects.filter(project=project_pk).order_by('-created_time')
+
+        return Issue.objects.all().order_by('-created_time')
 
     def perform_create(self, serializer):
         """
