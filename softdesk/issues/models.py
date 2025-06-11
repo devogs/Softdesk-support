@@ -1,6 +1,7 @@
 # issues/models.py
 from django.conf import settings
 from django.db import models
+import uuid
 
 from projects.models import Project
 
@@ -69,6 +70,7 @@ class Comment(models.Model):
     Each comment has a description, is linked to an issue, and has an author.
     """
 
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
     description = models.TextField(max_length=2048)
     issue = models.ForeignKey(
         Issue, on_delete=models.CASCADE, related_name="comments"
