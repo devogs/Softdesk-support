@@ -26,13 +26,10 @@ class IsAuthorOrContributor(permissions.BasePermission):
             bool: True if permission is granted, False otherwise.
         """
         if request.user and request.user.is_authenticated:
-            # Allow authenticated users to list (GET) or create (POST) projects
             if request.method in permissions.SAFE_METHODS and view.basename == "projects":
                 return True
             if request.method == "POST" and view.basename == "projects":
                 return True
-            # For other actions like retrieve, update, delete,
-            # object-level permissions will be checked.
             return True
         return False
 
@@ -40,22 +37,27 @@ class IsAuthorOrContributor(permissions.BasePermission):
         """
         Checks if the user has object-level permission for a specific project.
 
-        - Read access for contributors.
-        - Write access for authors.
+        Allows specific actions on a project instance based on the user's role
+        (author or contributor) and the requested method/action.
 
         Args:
             request (HttpRequest): The incoming request.
-            view (APIView): The view being accessed.
-            obj (Project): The Project object being accessed.
+            view (APIView): The viewset handling the request.
+            obj (Project): The project instance being accessed.
 
         Returns:
             bool: True if permission is granted, False otherwise.
         """
-        # Read permissions (GET, HEAD, OPTIONS) are allowed if the user is a contributor.
-        if request.method in permissions.SAFE_METHODS:
-            return obj.contributors.filter(id=request.user.id).exists()
 
-        # Write permissions (PUT, PATCH, DELETE) are only allowed to the author.
+        if request.method in permissions.SAFE_METHODS:
+            return request.user in obj.contributors.all() or obj.author == request.user
+
+        if request.method == "POST" and view.action == "contributors":
+            return request.user == obj.author
+
+        if request.method == "DELETE" and view.action == "contributors":
+            return request.user == obj.author
+
         if request.method in ["PUT", "PATCH", "DELETE"]:
             return obj.author == request.user
 
