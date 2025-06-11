@@ -137,5 +137,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ["id", "description", "issue", "author", "created_time"]
-        read_only_fields = ["id", "issue", "author", "created_time"]
+        fields = ["id", "uuid", "description", "issue", "author", "created_time"]
+        read_only_fields = ["id", "uuid", "issue", "author", "created_time"]
