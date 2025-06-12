@@ -4,15 +4,14 @@ from rest_framework import routers
 
 from .views import CommentViewSet, IssueViewSet
 
-# Using a SimpleRouter for base viewsets
 issue_router = routers.SimpleRouter()
-issue_router.register(r'', IssueViewSet, basename='issues') # No prefix here as it's within project_pk/issues/
+issue_router.register(r'', IssueViewSet, basename='issues')
 
 comment_router = routers.SimpleRouter()
-comment_router.register(r'', CommentViewSet, basename='comments') # No prefix here as it's within issue_pk/comments/
+comment_router.register(r'', CommentViewSet, basename='comments')
 
 urlpatterns = [
-    # URLs for Issues under a specific Project
+
     path(
         "projects/<int:project_pk>/issues/",
         IssueViewSet.as_view({"get": "list", "post": "create"}),
@@ -25,7 +24,6 @@ urlpatterns = [
         ),
         name="project-issues-detail",
     ),
-    # URLs for Comments under a specific Issue
     path(
         "projects/<int:project_pk>/issues/<int:issue_pk>/comments/",
         CommentViewSet.as_view({"get": "list", "post": "create"}),

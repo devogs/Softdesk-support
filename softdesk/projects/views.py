@@ -20,7 +20,7 @@ class ContributorViewSet(viewsets.ModelViewSet):
     This ViewSet is specifically for managing contributors associated with a project.
     """
     serializer_class = ContributorSerializer
-    permission_classes = [IsAuthenticated] # Basic authentication, refine with specific permissions
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """
@@ -127,7 +127,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         """
         Returns a queryset of projects based on user's role and action.
         - Superusers/staff can see all projects.
-        - For 'retrieve' action (detail view), all projects are returned for permission checking (to get 403 instead of 404).
+        - For 'retrieve' action (detail view), all projects are returned for permission checking.
         - For other actions (list, create, update, delete) and non-admin users,
           only projects where the user is author or contributor are returned.
         """

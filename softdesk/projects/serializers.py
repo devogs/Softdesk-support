@@ -28,7 +28,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["created_time", "author"]
 
-    def get_contributors_count(self, obj):
+    def get_contributors_count(self, obj) -> int:
         """
         Returns the number of contributors for a given project.
         """

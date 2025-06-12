@@ -46,7 +46,6 @@ class IssueViewSet(viewsets.ModelViewSet):
                 {"detail": "Project not found."}, status=status.HTTP_404_NOT_FOUND
             )
 
-        # Check if the current user is a contributor to this project (handled by permission, but double check)
         if not project.contributors.filter(id=self.request.user.id).exists():
             return Response(
                 {"detail": "You are not a contributor to this project."},
@@ -89,8 +88,6 @@ class CommentViewSet(viewsets.ModelViewSet):
                 {"detail": "Issue not found."}, status=status.HTTP_404_NOT_FOUND
             )
 
-        # Check if the current user is a contributor to this issue's project
-        # (handled by permission, but double check)
         if not issue.project.contributors.filter(id=self.request.user.id).exists():
             return Response(
                 {"detail": "You are not a contributor to this project."},

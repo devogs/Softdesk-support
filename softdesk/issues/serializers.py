@@ -19,8 +19,6 @@ class IssueSerializer(serializers.ModelSerializer):
     project = serializers.ReadOnlyField(source="project.title")
     assignee = serializers.ReadOnlyField(source="assignee.username")
 
-    # This field will be used for input (POST/PUT/PATCH)
-    # to set or update the assignee by username.
     assignee_username = serializers.CharField(write_only=True, required=False)
 
     class Meta:
@@ -35,7 +33,7 @@ class IssueSerializer(serializers.ModelSerializer):
             "status",
             "author",
             "assignee",
-            "assignee_username",  # Include the write-only field for input
+            "assignee_username",
             "created_time",
         ]
         read_only_fields = ["id", "project", "author", "created_time", "assignee"]
@@ -54,15 +52,13 @@ class IssueSerializer(serializers.ModelSerializer):
         to a contributor of the project.
         """
         if value is None:
-            return None # Allow assignee to be set to None/null
+            return None
 
         try:
             assignee = User.objects.get(username=value)
         except User.DoesNotExist:
             raise serializers.ValidationError("Assignee user does not exist.")
 
-        # Ensure assignee is a contributor to the project
-        # This context is typically available in viewsets for nested serializers
         project_id = self.context["view"].kwargs["project_pk"]
         try:
             project = Project.objects.get(pk=project_id)
@@ -83,11 +79,9 @@ class IssueSerializer(serializers.ModelSerializer):
 
         Sets the author and assignee based on validated data.
         """
-        # validated_data for assignee_username will already be the User object
-        # if validate_assignee_username was called and returned the User object.
-        # If it returned the username, then we need to fetch it here.
+
         assignee_user_obj = validated_data.pop("assignee_username", None)
-        
+
         issue = Issue.objects.create(**validated_data)
         if assignee_user_obj:
             issue.assignee = assignee_user_obj
@@ -100,26 +94,19 @@ class IssueSerializer(serializers.ModelSerializer):
 
         Handles updating the assignee if `assignee_username` is provided.
         """
-        # Pop assignee_username from validated_data. This value will be the User object
-        # if validate_assignee_username was called and returned the User object.
+
         assignee_user_obj = validated_data.pop("assignee_username", None)
 
-        # Handle assignee update based on whether assignee_username was provided
         if assignee_user_obj is not None:
-            # If a User object was provided (from validation), set it
             instance.assignee = assignee_user_obj
         elif "assignee_username" in self.initial_data and self.initial_data["assignee_username"] == "":
-            # If assignee_username was explicitly provided as an empty string, set assignee to None
             instance.assignee = None
-        # If 'assignee_username' was not in initial_data, we do not change the existing instance.assignee
 
-        # Update other fields using .get() to allow for partial updates (PATCH)
-        # while also handling full PUT requests.
         instance.title = validated_data.get("title", instance.title)
         instance.description = validated_data.get("description", instance.description)
         instance.tag = validated_data.get("tag", instance.tag)
         instance.priority = validated_data.get("priority", instance.priority)
-        instance.status = validated_data.get("status", instance.status) # FIXED TYPO HERE
+        instance.status = validated_data.get("status", instance.status)
 
         instance.save()
         return instance

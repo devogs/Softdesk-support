@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"bob\",\n    \"email\": \"bob@devogs.xyz\",\n    \"password\": \"bob1234\",\n    \"age\": 30,\n    \"can_be_contacted\": true,\n    \"can_data_be_shared\": false\n}",
+							"raw": "{\n    \"username\": \"matt\",\n    \"email\": \"matt@devogs.xyz\",\n    \"password\": \"matt1234\",\n    \"age\": 30,\n    \"can_be_contacted\": true,\n    \"can_data_be_shared\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,7 +62,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"bob\",\n    \"password\": \"bob1234\"\n}",
+							"raw": "{\n    \"username\": \"matt\",\n    \"password\": \"matt1234\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -70,15 +70,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/login/",
+							"raw": "http://{{host}}:{{port}}/api/login/",
 							"protocol": "http",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
+							"port": "{{port}}",
 							"path": [
 								"api",
 								"login",
@@ -95,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0OTAyNjg2OCwiaWF0IjoxNzQ4OTQwNDY4LCJqdGkiOiIwMTUzNWMzNjcxZDY0Yzc1OTRjZjgzNTI5N2Q1YzlhMyIsInVzZXJfaWQiOjF9.jh4jyuSmVurx3gY1FwaQAytwthKxEkB80pR-ljG1V0c\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -103,19 +100,198 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/login/refresh/",
+							"raw": "http://{{host}}:{{port}}/api/login/refresh/",
 							"protocol": "http",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
+							"port": "{{port}}",
 							"path": [
 								"api",
 								"login",
 								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "profile_list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile_read",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/1/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile_update_partial",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"new_email@example.com\",\n    \"can_be_contacted\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/2/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile_update_full",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"updated_full@example.com\",\n    \"age\": 26,\n    \"can_be_contacted\": true,\n    \"can_data_be_shared\": false,\n    \"password\": \"testuser1234\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/3/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile_delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/3/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"3",
 								""
 							]
 						}
@@ -162,7 +338,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"My test Project\",\n    \"description\": \"This is a test project.\",\n    \"type\": \"back-end\"\n}"
+							"raw": "{\n    \"title\": \"The fifth Project\",\n    \"description\": \"This is the 5th project with contributors.\",\n    \"type\": \"back-end\",\n    \"contributors\": \"\"\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/projects/",
@@ -266,6 +442,209 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "project_read",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/10/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"10",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "project_update_full",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The fourth Project\",\n    \"description\": \"This is the 4th project created by bob and modified by matt contributor.\",\n    \"type\": \"back-end\",\n    \"contributors\": \"matt\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "project_update_partial",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The fourth Project is partially modified with PATCH\",\n    \"description\": \"This is the 4th project created by matt.\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/2/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "project_delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/10/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"10",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -289,7 +668,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"first created issue\",\n    \"description\": \"I test to create an issue on a project.\",\n    \"tag\": \"bug\",\n    \"priority\": \"high\",\n    \"status\": \"to do\",\n    \"assignee_username\": \"matt\"\n}",
+							"raw": "{\n    \"title\": \"create test issue\",\n    \"description\": \"I test to create a new issue on project 8.\",\n    \"tag\": \"bug\",\n    \"priority\": \"high\",\n    \"status\": \"to do\",\n    \"assignee_username\": \"matt\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -308,93 +687,6 @@
 								"projects",
 								"{{project_id}}",
 								"issues",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "comment_create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{AUTHOR_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"description\": \"I hope this will be working!\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/1/comments/",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"projects",
-								"{{project_id}}",
-								"issues",
-								"1",
-								"comments",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "issue_modify",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{AUTHOR_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"The first issue is working\",\n    \"description\": \"Fixed the connection string in settings.\",\n    \"tag\": \"bug\",\n    \"priority\": \"high\",\n    \"status\": \"finished\",\n    \"assignee_username\": \"matt\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/1/",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"projects",
-								"{{project_id}}",
-								"issues",
-								"1",
 								""
 							]
 						}
@@ -447,6 +739,182 @@
 					"response": []
 				},
 				{
+					"name": "issue_read",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								"issues",
+								"4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "issue_update_full",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The first issue is modified\",\n    \"description\": \"Fixed the connection string in settings.\",\n    \"tag\": \"bug\",\n    \"priority\": \"high\",\n    \"status\": \"in progress\",\n    \"assignee_username\": \"matt\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								"issues",
+								"4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "issue_delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"first created issue\",\n    \"description\": \"I test to create an issue on a project.\",\n    \"tag\": \"bug\",\n    \"priority\": \"high\",\n    \"status\": \"to do\",\n    \"assignee_username\": \"matt\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/3/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								"issues",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment_create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"yet another comment for issue to delete\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/comments/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								"issues",
+								"4",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "comments_list",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -474,7 +942,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/1/comments/",
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/comments/",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -485,7 +953,7 @@
 								"projects",
 								"{{project_id}}",
 								"issues",
-								"1",
+								"4",
 								"comments",
 								""
 							]
@@ -494,7 +962,7 @@
 					"response": []
 				},
 				{
-					"name": "comments_details",
+					"name": "comments_read",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -521,7 +989,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/1/comments/2/",
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/comments/3/",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -532,9 +1000,54 @@
 								"projects",
 								"{{project_id}}",
 								"issues",
-								"1",
+								"4",
 								"comments",
-								"2",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment_update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTHOR_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"I hope this will be working!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/comments/3/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"projects",
+								"{{project_id}}",
+								"issues",
+								"4",
+								"comments",
+								"3",
 								""
 							]
 						}
@@ -566,7 +1079,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/1/comments/1/",
+							"raw": "http://{{host}}:{{port}}/api/projects/{{project_id}}/issues/4/comments/4/",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -577,9 +1090,9 @@
 								"projects",
 								"{{project_id}}",
 								"issues",
-								"1",
+								"4",
 								"comments",
-								"1",
+								"4",
 								""
 							]
 						}
@@ -587,6 +1100,52 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"const refreshToken = pm.environment.get(\"REFRESH_TOKEN\");",
+					"const host = pm.environment.get(\"host\") || \"127.0.0.1\";",
+					"const port = pm.environment.get(\"port\") || \"8000\";",
+					"",
+					"if (refreshToken) {",
+					"    pm.sendRequest({",
+					"        url: `http://${host}:${port}/api/login/refresh/`,",
+					"        method: 'POST',",
+					"        header: {",
+					"            'Content-Type': 'application/json'",
+					"        },",
+					"        body: {",
+					"            mode: 'raw',",
+					"            raw: JSON.stringify({ refresh: refreshToken })",
+					"        }",
+					"    }, (err, res) => {",
+					"        if (err || res.code !== 200) {",
+					"            console.log(\"Failed to refresh token:\", err || res.json());",
+					"        } else {",
+					"            const response = res.json();",
+					"            pm.environment.set(\"AUTHOR_TOKEN\", response.access);",
+					"            console.log(\"Access token refreshed successfully\");",
+					"        }",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
