@@ -122,7 +122,7 @@ A Postman collection is provided for easy testing of the API endpoints.
 
 4.  **Execute Requests:**
     * Start with the user authentication requests (e.g., `signup`, `login`) to obtain JWT tokens.
-    * Copy the `access` tokens and paste them into the `AUTHOR_TOKEN`, `CONTRIBUTOR_TOKEN`, or `NONCONTRIBUTOR_TOKEN` environment variables in Postman as appropriate.
+    * The `access` token is automatically set in the `AUTHOR_TOKEN` via javascript
     * Proceed to test other functionalities, replacing `{{project_id}}`, `{{issue_id}}`, `{{comment_id}}` as you create resources.
 
 ## Code Quality
