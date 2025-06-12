@@ -9,10 +9,8 @@ class IsUserOwnerOrAdmin(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Allow GET, HEAD, OPTIONS requests for authenticated users (to view their own profile)
-        # Admins can view any profile
+
         if request.method in permissions.SAFE_METHODS:
             return obj == request.user or request.user.is_staff or request.user.is_superuser
 
-        # For PUT, PATCH, DELETE requests, object must be the user themselves or the user must be an admin
         return obj == request.user or request.user.is_staff or request.user.is_superuser

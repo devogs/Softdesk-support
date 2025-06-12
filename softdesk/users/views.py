@@ -40,12 +40,8 @@ class UserCreateAPIView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # The serializer's create method already handles set_password and save()
         serializer.save()
 
-
-# softdesk/users/views.py
-# ... (rest of your imports and UserCreateAPIView remain the same)
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -68,9 +64,7 @@ class UserViewSet(viewsets.ModelViewSet):
         or that administrators have appropriate access.
         Ordering is added for consistent results.
         """
-        # Return all users. Permissions will filter access.
         return User.objects.all().order_by('id')
-
 
     def destroy(self, request, *args, **kwargs):
         """

@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api-auth/', include('rest_framework.urls')), # Optional, for browsable API
+    path('api-auth/', include('rest_framework.urls')),
     path('api/', include('users.urls')),
-    path('api/', include('projects.urls')), # This will now handle issues and comments
+    path('api/', include('projects.urls')),
 ]
