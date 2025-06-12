@@ -38,14 +38,13 @@ class ContributorViewSet(viewsets.ModelViewSet):
             project = Project.objects.get(pk=project_pk)
         except Project.DoesNotExist:
             return Response(
-                {"detail": "Project not found."},
+                {"detail": "Projet introuvable."},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Ensure the current user is the author of the project to add contributors
         if request.user != project.author:
             return Response(
-                {"detail": "You do not have permission to add contributors to this project."},
+                {"detail": "Vous n'avez pas la permission d'ajouter des contributeurs à ce projet."},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -57,19 +56,19 @@ class ContributorViewSet(viewsets.ModelViewSet):
             user_to_add = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response(
-                {"detail": "User with this username does not exist."},
+                {"detail": "Ce nom d'utilisateur n'existe pas."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         if Contributor.objects.filter(project=project, user=user_to_add).exists():
             return Response(
-                {"detail": "This user is already a contributor to this project."},
+                {"detail": "Cet utilisateur est déjà un contributeur de ce projet."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         Contributor.objects.create(project=project, user=user_to_add)
         return Response(
-            {"detail": f"User '{username}' added as contributor."},
+            {"detail": f"L'utilisateur '{username}' a été ajouté comme contributeur."},
             status=status.HTTP_201_CREATED
         )
 
@@ -82,36 +81,33 @@ class ContributorViewSet(viewsets.ModelViewSet):
             project = Project.objects.get(pk=project_pk)
         except Project.DoesNotExist:
             return Response(
-                {"detail": "Project not found."},
+                {"detail": "Projet introuvable."},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Ensure the current user is the author of the project to remove contributors
         if request.user != project.author:
             return Response(
-                {"detail": "You do not have permission to remove contributors from this project."},
+                {"detail": "Vous n'avez pas la permission de retirer des contributeurs de ce projet."},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # Get the contributor instance to delete
         try:
-            instance = self.get_object() # This will get the Contributor object based on URL lookup_field
-        except Exception: # Handle case where get_object doesn't find it
+            instance = self.get_object()
+        except Exception:
             return Response(
-                {"detail": "Contributor not found for this project."},
+                {"detail": "L'utilisateur n'est pas un contributeur de ce projet."},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Prevent removing the project author as a contributor
         if instance.user == project.author:
             return Response(
-                {"detail": "The project author cannot be removed from contributors."},
+                {"detail": "L'auteur du projet ne peut pas être retiré des contributeurs."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         self.perform_destroy(instance)
         return Response(
-            {"detail": "Contributor removed successfully."},
+            {"detail": "Contributeur retiré avec succès."},
             status=status.HTTP_204_NO_CONTENT
         )
 
@@ -129,12 +125,23 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Returns the queryset of projects for the current request.
-
-        Users can only see projects they are contributing to or are the author of.
-        Adds explicit ordering to prevent UnorderedObjectListWarning.
+        Returns a queryset of projects based on user's role and action.
+        - Superusers/staff can see all projects.
+        - For 'retrieve' action (detail view), all projects are returned for permission checking (to get 403 instead of 404).
+        - For other actions (list, create, update, delete) and non-admin users,
+          only projects where the user is author or contributor are returned.
         """
-        return Project.objects.filter(contributors=self.request.user).distinct().order_by('-created_time')
+        user = self.request.user
+
+        if user.is_superuser or user.is_staff:
+            return Project.objects.all().order_by('id')
+
+        if self.action == 'retrieve':
+            return Project.objects.all().order_by('id')
+
+        authored_projects = Project.objects.filter(author=user)
+        contributed_projects = Project.objects.filter(contributors=user)
+        return (authored_projects | contributed_projects).distinct().order_by('id')
 
     def perform_create(self, serializer):
         """
@@ -166,7 +173,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         elif request.method == "POST":
             if project.author != request.user:
                 return Response(
-                    {"detail": "You do not have permission to add contributors."},
+                    {"detail": "Vous n'avez pas la permission d'ajouter des contributeurs."},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
@@ -177,14 +184,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
                     user_to_add = User.objects.get(username=username)
                 except User.DoesNotExist:
                     return Response(
-                        {"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND
+                        {"detail": "Utilisateur introuvable."}, status=status.HTTP_404_NOT_FOUND
                     )
 
                 if Contributor.objects.filter(
                     project=project, user=user_to_add
                 ).exists():
                     return Response(
-                        {"detail": "User is already a contributor to this project."},
+                        {"detail": "L'utilisateur est déjà un contributeur de ce projet."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
@@ -200,14 +207,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
         elif request.method == "DELETE":
             if project.author != request.user:
                 return Response(
-                    {"detail": "You do not have permission to remove contributors."},
+                    {"detail": "Vous n'avez pas la permission de retirer des contributeurs"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
             username = request.data.get("username")
             if not username:
                 return Response(
-                    {"detail": "Username is required to remove a contributor."},
+                    {"detail": "Le nom d'utilisateur est requis pour retirer un contributeur."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -215,12 +222,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 user_to_remove = User.objects.get(username=username)
             except User.DoesNotExist:
                 return Response(
-                    {"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND
+                    {"detail": "L'utilisateur introuvable."}, status=status.HTTP_404_NOT_FOUND
                 )
 
             if user_to_remove == project.author:
                 return Response(
-                    {"detail": "The project author cannot be removed from contributors."},
+                    {"detail": "L'auteur du projet ne peut pas être retiré des contributeurs."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -230,11 +237,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 )
                 contributor_to_delete.delete()
                 return Response(
-                    {"detail": "Contributor removed successfully."},
+                    {"detail": "Contributeur retiré avec succès."},
                     status=status.HTTP_204_NO_CONTENT,
                 )
             except Contributor.DoesNotExist:
                 return Response(
-                    {"detail": "User is not a contributor to this project."},
+                    {"detail": "L'utilisateur n'est pas un contributeur de ce projet."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
