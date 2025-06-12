@@ -115,12 +115,9 @@ A Postman collection is provided for easy testing of the API endpoints.
     * Add the following variables:
         * `host`: `127.0.0.1`
         * `port`: `8000`
+        * `project_id`: (The id of the project)
         * `AUTHOR_TOKEN`: (Leave empty initially, will be populated after login)
-        * `CONTRIBUTOR_TOKEN`: (Leave empty initially)
-        * `NONCONTRIBUTOR_TOKEN`: (Leave empty initially)
-        * `PROJECT_ID`: (Leave empty initially)
-        * `ISSUE_ID`: (Leave empty initially)
-        * `COMMENT_ID`: (Leave empty initially)
+        * `REFRESH_TOKEN`: (Leave empty initially)
     * Select your newly created environment from the dropdown.
 
 4.  **Execute Requests:**
